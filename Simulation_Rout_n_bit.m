@@ -5,13 +5,13 @@ close all;
 %% Parametry obvodu
 
 I0 = 10e-3;       % Proud zdroje [A]
-Ro = 1e3;         % Vystupni odpor [Ohm]
+Ro = 50e5;         % Vystupni odpor [Ohm]
 C = 100e-6;       % Kapacita [F]
 
 n_bit = 8;       % Pocet bitu ADC
 
 Uref = 3.3;       %referenční napětí 
-Vmin = 0;         %rozsahy ADC převodu
+Vmin =0;         %rozsahy ADC převodu
 Vmax = 3.3;
 
 %% ADC
@@ -77,4 +77,15 @@ ylim([0 5]);
 
 %% Volání funkcí DNL ADC
 dnl = Function_DNL(U_vzor, Vmin, Vmax, n_bit);
-INL = Function_INL(dnl)
+INL = Function_INL(dnl);
+%% Výpočet frekvence a výpisy
+
+Uinf = I0*Ro;
+T_real  = 2*(Ro*C*log((Uinf - Vmin)/(Uinf - Vmax)));
+f_real  = 1/T_real;
+fprintf('T_oscilatoru = %.4f ms\nf_oscilatoru = %.3f Hz\n', T_real*1e3, f_real);
+
+fprintf('max|DNL| = %.4f LSB = %.3e s\n', max(abs(dnl),[],'omitnan'), max(abs(dnl),[],'omitnan')*LSB_ideal);
+fprintf('max|INL| = %.4f LSB = %.3e s\n', max(abs(INL),[],'omitnan'), max(abs(INL),[],'omitnan')*LSB_ideal);
+fprintf('Pocet bitu = %d\n', n_bit);
+fprintf('Výstupní odpor = %d Ω', Ro);
