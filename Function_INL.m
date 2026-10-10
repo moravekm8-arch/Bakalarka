@@ -1,14 +1,28 @@
-function INL = Function_INL(dnl)                   %začátek funkce
-    INL = cumsum(dnl);                             %výpočet INL, protože INL je suma DNL
+function INL = Function_INL(dnl)
     
-    kod = 0:(length(INL) - 1);                     % určení délky kodu(osa x ) od 0 do délkyINL-1
+    d = dnl(:);              %dnl na sloupcový vektor
+    platne = ~isnan(d);      %vytvoření vektoru pro platné hodnoty
+    d(~platne) = 0;          %nan nahradí nulou 
+    INL_raw = cumsum(d);     %výpočet sumy dnl
+
     
+    kod = (0:numel(INL_raw)-1).'; %proměnná x pro proložení
+
+    
+    p = polyfit(kod(platne), INL_raw(platne), 1);   % p(1)=smernice, p(2)=posun
+    primka = polyval(p, kod);                       %určení přímky
+
+    
+    INL = INL_raw - primka;                         %výpočet inl jako rozdíl ideální -reálné přímky
+    INL(~platne) = NaN;                             %vrácení nan na neplatné body
+
+    % Graf
     figure;
-    plot(kod, INL, 'b.-', 'LineWidth', 1.5, 'MarkerSize', 10);
-    xlabel('Kód');
+    plot(kod, INL, 'b.', 'MarkerSize', 6);
+    xlabel('Kod ADC');
     ylabel('INL [LSB]');
-    title('INL');
+    title('INL ');
     grid on;
-    
-  ylim([-1 1]);
+
+    ylim([-1 1])
 end
