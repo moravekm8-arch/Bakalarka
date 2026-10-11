@@ -43,7 +43,7 @@ Go = 1/Ro;
 dudt = @(t,u) (I0 - Go*u)/C;
 
 % Pocatecni podminka
-u0 = Vmin; ;
+u0 = Vmin;
 
 
 [t,u] = ode45(dudt, tv, u0);
