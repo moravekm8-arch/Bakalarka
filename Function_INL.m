@@ -24,5 +24,5 @@ function INL = Function_INL(dnl)
     title('INL ');
     grid on;
 
-    ylim([-1 1])
+   
 end
