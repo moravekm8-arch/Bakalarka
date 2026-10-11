@@ -34,5 +34,5 @@ function dnl = Function_DNL(U_vzor, Vmin, Vmax, n_bit);
     ylabel('DNL [LSB]');
     title('Diferencialni nelinearita ADC (DNL)');
 
-    ylim([-1 1]);
+    
 end
