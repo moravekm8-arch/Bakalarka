@@ -11,7 +11,7 @@ C = 47e-9;       % Kapacita [F]
 n_bit = 8;       % Pocet bitu ADC
 
 
-%rozsahy napětí. Pro Vref brát že Vref=Vmax a Vmin hodit na nulu 
+%rozsahy napětí
 Vmin =-5;         
 Vmax = 5;
 
