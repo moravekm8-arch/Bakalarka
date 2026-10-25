@@ -4,8 +4,8 @@ close all;
 
 %% Parametry obvodu
 
-I0 = 10e-3;       % Proud zdroje [A]
-Ro = 230e2;         % Vystupni odpor [Ohm]
+I0 = 100e-3;       % Proud zdroje [A]
+Ro = 100e8;         % Vystupni odpor [Ohm]
 
 
 n_bit = 8;       % Pocet bitu ADC
@@ -16,7 +16,7 @@ n_bit = 8;       % Pocet bitu ADC
 R1 = 5000;         %odpor u integrátoru
 R2 = 1000;         %odpor u komparátoru
 R3 = 5000;          %odpor u komparátoru(ZV)
-C = 100e-9;        %kapacitor u ontegrátor
+C = 1e-9;        %kapacitor u ontegrátor
 U_ref = 5;         %refereční napětí
 UCCp = 15;         %napájení OZ
 UCCm = -15;        %napájení OZ
@@ -102,6 +102,25 @@ title('Odchylka ideálu od vypočteného průběhu');
 %% Volání funkcí DNL ADC
 dnl = Function_DNL(U_vzor, Vmin, Vmax, n_bit);
 INL = Function_INL(dnl);
+
+
+%% výpočet SR (Slew rate)
+
+
+amp  = Vmax - Vmin;
+
+V_i = Vmin + 0.1*amp;     
+V_f = Vmin + 0.3*amp;     
+
+t_i = interp1(u, t, V_i);
+t_f = interp1(u, t, V_f);
+
+SR = (V_f - V_i) / (t_f - t_i);
+
+
+
+
+
 %% Výpočet urovni frekvence a výpisy
 
 T_oscilatoru = (2*R1*C*(Vmax-Vmin))/UCCp ;         % perioda 
@@ -116,3 +135,4 @@ fprintf('Casove rozliseni  = %.4g s\n', LSB_t);
 fprintf('Horni trashhold  = %.4g V\n', Vmax);
 fprintf('Dolni trashhold = %.4g V\n', Vmin);
 fprintf('T_oscilatoru = %.5g s\nf_oscilatoru = %.5g Hz\n', T_oscilatoru, f_oscilatoru);
+fprintf('Slew rate = %.3f V/us\n', SR/1e6)
